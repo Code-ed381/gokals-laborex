@@ -1,6 +1,7 @@
 import {Container, Stack, Modal, Input, 
     Button, Box, Typography, Radio, RadioGroup,
-    FormControlLabel, FormControl, FormLabel
+    FormControlLabel, FormControl, FormLabel, Chip,
+    Avatar, AlertTitle, Alert 
 } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -29,9 +30,26 @@ const style = {
 
 const Receipt = ()=> {
     const [open, setOpen] = useState(false);
+    const [cash, setCash] = useState(false);
+    const [momo, setMomo] = useState(false);
+    const [bank, setBank] = useState(false);
+    const [searchType, setSearchType] = useState('');
+    const [customer, setCustomer] = useState('old');
     const [selectedDate, setSelectedDate] = useState(null);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+
+    const handleCashToggle = ()=> {
+        setCash(prevState => !prevState);
+    }
+
+    const handleMomoToggle = ()=> {
+        setMomo(prevState => !prevState);
+    }
+
+    const handleBankToggle = ()=> {
+        setBank(prevState => !prevState);
+    }
 
     // Helper function to extract the day, month, and year from a date
     const getDayMonthYear = (date) => ({
@@ -40,6 +58,7 @@ const Receipt = ()=> {
         year: date.getUTCFullYear(),
     });
 
+    // function to filter date
     const handleDateChange = async (newDate) => {
         setSelectedDate(newDate);
         console.log(newDate); // Log or use the selected date as needed
@@ -77,23 +96,150 @@ const Receipt = ()=> {
         <>
             <Grid container spacing={2}>
                 <Grid item size={3}>
-                    <Container fluid sx={{padding: 2}}>
-                        <Typography variant='h4'>History</Typography>
+                    <Container fluid sx={{padding: 2}} >
+                        <div>
+
+                        <Chip sx={{fontSize: 22, padding: 3, width: '100%'}} avatar={<Avatar>M</Avatar>} color="success" label="Receipts" />
+                        </div>
+                        <hr/>
+                        {/* Search method radio buttons */}
+                        <div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" onClick={(e)=> setSearchType(e.target.value)} name="inlineRadioOptions" id="inlineRadio1" value="keyword" />
+                                <label class="form-check-label" for="inlineRadio1"><h6>Search by keyword</h6></label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" onClick={(e)=> setSearchType(e.target.value)} name="inlineRadioOptions" id="inlineRadio2" value="date" />
+                                <label class="form-check-label" for="inlineRadio2"><h6>Search by date</h6></label>
+                            </div>
+                        </div>
+                        <hr/>
+
+                        {searchType === 'keyword' ? (
+                            <div class="form-floating mb-3 mt-3">
+                                <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com"/>
+                                <label for="floatingInput">Type keyword</label>
+                            </div>
+                        ) : searchType === 'date' ? (
+                            <div class='mt-3'>
+                                <LocalizationProvider dateAdapter={AdapterDayjs} >
+                                    <DatePicker
+                                        value={selectedDate}
+                                        onChange={handleDateChange}
+                                        fullWidth
+                                    />
+                                </LocalizationProvider>
+                            </div>
+                        ) : ('')}
+                        
+
+                        <div 
+                            class="mt-4"
+                            style={{ 
+                                overflowY: 'scroll', 
+                                height: 580,
+                                scrollbarWidth: '5px',
+                                scrollbarColor: '#fff #fff',
+                            }}
+                        >
+                            <div class="accordion accordion-flush" id="accordionFlushExample">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                        Accordion Item #1
+                                    </button>
+                                    </h2>
+                                    <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                                    <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the first item's accordion body.</div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                                        Accordion Item #2
+                                    </button>
+                                    </h2>
+                                    <div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                                    <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the second item's accordion body. Let's imagine this being filled with some actual content.</div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                                        Accordion Item #3
+                                    </button>
+                                    </h2>
+                                    <div id="flush-collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                                    <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the third item's accordion body. Nothing more exciting happening here in terms of content, but just filling up the space to make it look, at least at first glance, a bit more representative of how this would look in a real-world application.</div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                                        Accordion Item #3
+                                    </button>
+                                    </h2>
+                                    <div id="flush-collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                                    <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the third item's accordion body. Nothing more exciting happening here in terms of content, but just filling up the space to make it look, at least at first glance, a bit more representative of how this would look in a real-world application.</div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                                        Accordion Item #3
+                                    </button>
+                                    </h2>
+                                    <div id="flush-collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                                    <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the third item's accordion body. Nothing more exciting happening here in terms of content, but just filling up the space to make it look, at least at first glance, a bit more representative of how this would look in a real-world application.</div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                                        Accordion Item #3
+                                    </button>
+                                    </h2>
+                                    <div id="flush-collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                                    <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the third item's accordion body. Nothing more exciting happening here in terms of content, but just filling up the space to make it look, at least at first glance, a bit more representative of how this would look in a real-world application.</div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                                        Accordion Item #3
+                                    </button>
+                                    </h2>
+                                    <div id="flush-collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                                    <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the third item's accordion body. Nothing more exciting happening here in terms of content, but just filling up the space to make it look, at least at first glance, a bit more representative of how this would look in a real-world application.</div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                                        Accordion Item #3
+                                    </button>
+                                    </h2>
+                                    <div id="flush-collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                                    <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the third item's accordion body. Nothing more exciting happening here in terms of content, but just filling up the space to make it look, at least at first glance, a bit more representative of how this would look in a real-world application.</div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                                        Accordion Item #3
+                                    </button>
+                                    </h2>
+                                    <div id="flush-collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                                    <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the third item's accordion body. Nothing more exciting happening here in terms of content, but just filling up the space to make it look, at least at first glance, a bit more representative of how this would look in a real-world application.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </Container>
                 </Grid>
                 <Grid item size={6}>
-                    <Container fluid sx={{padding: 2}}>
-                        {/* <Typography variant="h6" component="h1">Search for receipt</Typography> */}
-                        <Typography variant='h4'>Today</Typography>
-                        {/* <Stack direction="row" spacing={3} mb={3}>
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DatePicker
-                                value={selectedDate}
-                                onChange={handleDateChange}
-                                />
-                            </LocalizationProvider>
-                            <Input placeholder="Saerch receipt..." size='lg' variant="outlined" sx={{maxWidth: 400}}/>
-                        </Stack> */}
+                    <Container fluid sx={{padding: 2}} class="shadow p-3 mb-5 bg-body-tertiary rounded">
                         <Grid container spacing={2} >
                             <Grid size={12}>
 
@@ -106,45 +252,116 @@ const Receipt = ()=> {
                                         </h2>
                                         <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
                                             <div class="accordion-body">
-                                                {/* <Button variant="contained" onClick={handleOpen}>New Receipt</Button> */}
-                                                <div class="text-center">
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"/>
-                                                        <label class="form-check-label" for="inlineRadio1">All</label>
+                                                {/* <Alert severity="success" variant="filled" >
+                                                    <AlertTitle>Success</AlertTitle>
+                                                    This is a success Alert with an encouraging title.
+                                                </Alert> */}
+                                                {/* <Typography variant="h5">Customer Details</Typography> */}
+                                                <FormControl>
+                                                <FormLabel id="demo-row-radio-buttons-group-label">Customer Details</FormLabel>
+                                                    <RadioGroup
+                                                        row
+                                                        aria-labelledby="demo-row-radio-buttons-group-label"
+                                                        name="row-radio-buttons-group"
+                                                    >
+                                                        <FormControlLabel value="old" control={<Radio />} label="Legacy Customer" />
+                                                        <FormControlLabel value="new" control={<Radio />} label="First-Time Customer" />
+                                                    </RadioGroup>
+                                                </FormControl>
+                                                {/* <label for="exampleDataList" class="form-label">Datalist example</label> */}
+                                                <input class="form-control" list="datalistOptions" id="exampleDataList" placeholder="Type to search..."/>
+                                                <datalist id="datalistOptions">
+                                                    <option value="San Francisco"/>
+                                                    <option value="New York"/>
+                                                    <option value="Seattle"/>
+                                                    <option value="Los Angeles"/>
+                                                    <option value="Chicago"/>
+                                                </datalist>
+                                                <div class="row g-3">
+                                                    <div class="col">
+                                                        <input type="text" class="form-control" placeholder="Customer name" aria-label="Customer name"/>
                                                     </div>
+                                                    <div class="col">
+                                                        <input type="text" class="form-control" placeholder="Email" aria-label="Email"/>
+                                                    </div>
+                                                </div>
+                                                {/* Checkboxes for payment methods */}
+                                                {/* <Typography variant="h5" mt={4}></Typography> */}
+                                                <div class="mt-4" style={{fontSize: 20}}>
+                                                    <FormLabel id="demo-row-radio-buttons-group-label" mt={4}>Payment methods</FormLabel>
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"/>
+                                                        <input class="form-check-input" type="checkbox" onChange={handleCashToggle} id="inlineCheckbox2" value="option2"/>
                                                         <label class="form-check-label" for="inlineRadio1">Cash</label>
                                                     </div>
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"/>
+                                                        <input class="form-check-input" type="checkbox" onChange={handleMomoToggle} id="inlineCheckbox3" value="option3"/>
                                                         <label class="form-check-label" for="inlineRadio2">Momo</label>
                                                     </div>
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3" />
-                                                        <label class="form-check-label" for="inlineRadio3">Bank</label>
+                                                        <input class="form-check-input" type="checkbox" onChange={handleBankToggle} id="inlineCheckbox1" value="option1"/>
+                                                        <label class="form-check-label" for="inlineRadio1">Bank</label>
                                                     </div>
                                                 </div>
 
                                                 <div>
-                                                <Stack direction="row" spacing={2}>
-                                                    <div class="form-floating mb-3">
-                                                        <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com"/>
-                                                        <label for="floatingInput">Email address</label>
-                                                    </div>
-                                                    <div class="form-floating">
-                                                        <input type="password" class="form-control" id="floatingPassword" placeholder="Password"/>
-                                                        <label for="floatingPassword">Password</label>
-                                                    </div>
-                                                    <div class="form-floating">
-                                                        <input type="password" class="form-control" id="floatingPassword" placeholder="Password"/>
-                                                        <label for="floatingPassword">Password</label>
-                                                    </div>
-                                                    <div class="form-floating">
-                                                        <input type="password" class="form-control" id="floatingPassword" placeholder="Password"/>
-                                                        <label for="floatingPassword">Password</label>
-                                                    </div>
-                                                </Stack>
+                                                    {/* Cash fields */}
+                                                    {cash ? (
+                                                        <div class="row g-2 mb-3">
+                                                            <div class="col-md">
+                                                                <div class="form-floating">
+                                                                <input type="email" class="form-control" id="floatingInputGrid" placeholder="name@example.com" value=""/>
+                                                                <label for="floatingInputGrid">Cash Amount</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md">
+                                                                <div class="form-floating">
+                                                                    <input type="password" class="form-control" id="floatingPassword" placeholder="Password"/>
+                                                                    <label for="floatingPassword">Cash Receipt ID</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>     
+                                                    ) : ('')}
+
+
+                                                    {/* Momo fields */}
+                                                    {momo ? (
+                                                        <div class="row g-2 mb-3">
+                                                            <div class="col-md">
+                                                                <div class="form-floating">
+                                                                <input type="email" class="form-control" id="floatingInputGrid" placeholder="name@example.com" />
+                                                                <label for="floatingInputGrid">Momo Amount</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md">
+                                                                <div class="form-floating">
+                                                                    <input type="password" class="form-control" id="floatingPassword" placeholder="Password"/>
+                                                                    <label for="floatingPassword">Momo Transaction ID</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>   
+                                                    ) : ('')}
+
+                                                    {/* Bank fields */}
+                                                    {bank ? (
+                                                        <div class="row g-2 mb-3">
+                                                            <div class="col-md">
+                                                                <div class="form-floating">
+                                                                <input type="email" class="form-control" id="floatingInputGrid" placeholder="name@example.com" value=""/>
+                                                                <label for="floatingInputGrid">Bank Amount</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md">
+                                                                <div class="form-floating">
+                                                                    <input type="password" class="form-control" id="floatingPassword" placeholder="Password"/>
+                                                                    <label for="floatingPassword">Bank Transaction ID</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>                                                  
+                                                    ) : ('')}
+
+                                                    {bank || momo || cash ? (
+                                                        <button type="button" class="btn btn-primary">Submit</button>
+                                                    ) : ('')}
                                                 </div>
                                             </div>
                                         </div>
@@ -182,7 +399,110 @@ const Receipt = ()=> {
                 </Grid>
                 <Grid item size={3}>
                     <Container fluid sx={{padding: 2}}>
-                        <Typography variant='h4'>Receipt</Typography>
+                        {/* <Typography variant='h4'>Receipt</Typography> */}
+                        <Chip sx={{fontSize: 22, padding: 3, width: '100%'}} avatar={<Avatar>M</Avatar>} color="warning" label="Pending Approvals" />
+                        <div 
+                            class="mt-4"
+                            style={{ 
+                                overflowY: 'scroll', 
+                                height: 580,
+                                scrollbarWidth: '5px',
+                                scrollbarColor: '#fff #fff',
+                            }}
+                        >
+                            <div class="accordion accordion-flush" id="accordionFlushExample">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                        Accordion Item #1
+                                    </button>
+                                    </h2>
+                                    <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                                    <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the first item's accordion body.</div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                                        Accordion Item #2
+                                    </button>
+                                    </h2>
+                                    <div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                                    <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the second item's accordion body. Let's imagine this being filled with some actual content.</div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                                        Accordion Item #3
+                                    </button>
+                                    </h2>
+                                    <div id="flush-collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                                    <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the third item's accordion body. Nothing more exciting happening here in terms of content, but just filling up the space to make it look, at least at first glance, a bit more representative of how this would look in a real-world application.</div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                                        Accordion Item #3
+                                    </button>
+                                    </h2>
+                                    <div id="flush-collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                                    <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the third item's accordion body. Nothing more exciting happening here in terms of content, but just filling up the space to make it look, at least at first glance, a bit more representative of how this would look in a real-world application.</div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                                        Accordion Item #3
+                                    </button>
+                                    </h2>
+                                    <div id="flush-collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                                    <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the third item's accordion body. Nothing more exciting happening here in terms of content, but just filling up the space to make it look, at least at first glance, a bit more representative of how this would look in a real-world application.</div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                                        Accordion Item #3
+                                    </button>
+                                    </h2>
+                                    <div id="flush-collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                                    <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the third item's accordion body. Nothing more exciting happening here in terms of content, but just filling up the space to make it look, at least at first glance, a bit more representative of how this would look in a real-world application.</div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                                        Accordion Item #3
+                                    </button>
+                                    </h2>
+                                    <div id="flush-collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                                    <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the third item's accordion body. Nothing more exciting happening here in terms of content, but just filling up the space to make it look, at least at first glance, a bit more representative of how this would look in a real-world application.</div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                                        Accordion Item #3
+                                    </button>
+                                    </h2>
+                                    <div id="flush-collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                                    <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the third item's accordion body. Nothing more exciting happening here in terms of content, but just filling up the space to make it look, at least at first glance, a bit more representative of how this would look in a real-world application.</div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item bg-warning">
+                                    <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                                        Accordion Item #3
+                                    </button>
+                                    </h2>
+                                    <div id="flush-collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                                    <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the third item's accordion body. Nothing more exciting happening here in terms of content, but just filling up the space to make it look, at least at first glance, a bit more representative of how this would look in a real-world application.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </Container>
                 </Grid>
             </Grid>
