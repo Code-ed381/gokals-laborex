@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Outlet, Link } from "react-router-dom";
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -10,9 +11,6 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid2';
 import Input from '@mui/joy/Input';
 import Stack from '@mui/joy/Stack';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Modal from '@mui/material/Modal';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -25,6 +23,15 @@ import MenuItem from '@mui/material/MenuItem';
 import Fade from '@mui/material/Fade';
 import { useEffect, useState } from "react";
 import { createClient } from '@supabase/supabase-js';
+import Drawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
+import Divider from '@mui/material/Divider';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import InboxIcon from '@mui/icons-material/MoveToInbox';
+import MailIcon from '@mui/icons-material/Mail';
 
 const PROJECT_URI = 'https://pedlcwbxzcjuzwdupgwk.supabase.co'
 const PROJECT_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBlZGxjd2J4emNqdXp3ZHVwZ3drIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTM0MzEwNzQsImV4cCI6MjAyOTAwNzA3NH0.7GZC7LjXsoUgSHXLHDvblNPoC0y_v9UjDBYiAwLywAw'
@@ -46,11 +53,44 @@ const style = {
 
 export default function ButtonAppBar() {
   const [open, setOpen] = useState(false);
+  const [opendrawer, setOpendrawer] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
   const [employees, setEmployees] = useState([]);
+
+  const toggleDrawer = (newOpen: boolean) => () => {
+    setOpendrawer(newOpen);
+  };
+
+  const DrawerList = (
+    <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
+      <List>
+        <Link to="/" style={{ textDecoration: 'none', color: '#000'  }}>
+          <ListItem disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                <InboxIcon />
+              </ListItemIcon>
+              <ListItemText primary={'Dashboard'} />
+            </ListItemButton>
+          </ListItem>
+        </Link>
+      </List>
+      <Divider />
+      <List>
+          <ListItem disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                <MailIcon />
+              </ListItemIcon>
+              <ListItemText primary={'Receipt'} />
+            </ListItemButton>
+          </ListItem>
+      </List>
+    </Box>
+  );
 
 
   // Helper function to extract the day, month, and year from a date
@@ -141,11 +181,12 @@ export default function ButtonAppBar() {
               color="inherit"
               aria-label="menu"
               sx={{ mr: 2 }}
+              onClick={toggleDrawer(true)}
             >
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              News
+              Gokals - Laborex
             </Typography>
             <Button 
               color="inherit"
@@ -172,50 +213,10 @@ export default function ButtonAppBar() {
           <MenuItem onClick={handleCloser}>Logout</MenuItem>
         </Menu>
       </Box>
-
-      <Container fluid sx={{padding: 2}}>
-        {/* <Typography variant="h6" component="h1">Search for receipt</Typography> */}
-        <Stack direction="row" spacing={3} mb={3}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker
-              value={selectedDate}
-              onChange={handleDateChange}
-            />
-          </LocalizationProvider>
-          <Input placeholder="Saerch receipt..." size='lg' variant="outlined" sx={{maxWidth: 400}}/>
-        </Stack>
-        <Grid container spacing={2} >
-          <Grid size={12}>
-            <Button variant="contained" onClick={handleOpen}>New Receipt</Button>
-          </Grid>
-          {/* <Grid size={8}>
-          </Grid> */}
-        </Grid>
-      </Container>
-
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            New Receipt
-          </Typography>
-          <FormControl>
-            <FormLabel id="demo-row-radio-buttons-group-label">Customer</FormLabel>
-            <RadioGroup
-              row
-              aria-labelledby="demo-row-radio-buttons-group-label"
-              name="row-radio-buttons-group"
-            >
-              <FormControlLabel value="cash" control={<Radio />} label="Cash" />
-              <FormControlLabel value="credit" control={<Radio />} label="Credit" />
-            </RadioGroup>
-          </FormControl>
-        </Box>
-      </Modal>
+      <Drawer open={opendrawer} onClose={toggleDrawer(false)}>
+        {DrawerList}
+      </Drawer>
+      <Outlet/>
     </>
   );
 }
