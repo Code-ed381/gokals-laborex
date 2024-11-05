@@ -32,6 +32,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
+import MopedIcon from '@mui/icons-material/Moped';
 
 const PROJECT_URI = 'https://pedlcwbxzcjuzwdupgwk.supabase.co'
 const PROJECT_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBlZGxjd2J4emNqdXp3ZHVwZ3drIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTM0MzEwNzQsImV4cCI6MjAyOTAwNzA3NH0.7GZC7LjXsoUgSHXLHDvblNPoC0y_v9UjDBYiAwLywAw'
@@ -80,6 +81,16 @@ export default function ButtonAppBar() {
       </List>
       <Divider />
       <List>
+        <Link to="/dispatch" style={{ textDecoration: 'none', color: '#000'  }}>
+          <ListItem disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                <MopedIcon />
+              </ListItemIcon>
+              <ListItemText primary={'Dispatch'} />
+            </ListItemButton>
+          </ListItem>
+        </Link>
           <ListItem disablePadding>
             <ListItemButton>
               <ListItemIcon>
