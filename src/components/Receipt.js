@@ -111,6 +111,19 @@ const Receipt = ()=> {
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" onClick={(e)=> setSearchType(e.target.value)} name="inlineRadioOptions" id="inlineRadio2" value="date" />
                                 <label class="form-check-label" for="inlineRadio2"><h6>Search by date</h6></label>
+                <Grid item size={3.5}>
+                    <Container fluid sx={{padding: 2}}>
+                        <Typography variant='h5' mb={2}>Search Receipts</Typography>
+                        <hr/>
+                        {/* Search method radio buttons */}
+                        <div style={{fontSize: 20}}>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" onClick={(e)=> setSearchType(e.target.value)} name="inlineRadioOptions" id="inlineRadio1" value="keyword" />
+                                <label class="form-check-label" for="inlineRadio1">Search by keyword</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" onClick={(e)=> setSearchType(e.target.value)} name="inlineRadioOptions" id="inlineRadio2" value="date" />
+                                <label class="form-check-label" for="inlineRadio2">Search by date</label>
                             </div>
                         </div>
                         <hr/>
@@ -131,13 +144,14 @@ const Receipt = ()=> {
                                 </LocalizationProvider>
                             </div>
                         ) : ('')}
-                        
+
 
                         <div 
                             class="mt-4"
                             style={{ 
                                 overflowY: 'scroll', 
                                 height: 580,
+                                height: 450,
                                 scrollbarWidth: '5px',
                                 scrollbarColor: '#fff #fff',
                             }}
@@ -239,7 +253,12 @@ const Receipt = ()=> {
                     </Container>
                 </Grid>
                 <Grid item size={6}>
+
                     <Container fluid sx={{padding: 2}} class="shadow p-3 mb-5 bg-body-tertiary rounded">
+
+                    <Container fluid sx={{padding: 2}}>
+                        
+
                         <Grid container spacing={2} >
                             <Grid size={12}>
 
@@ -252,6 +271,7 @@ const Receipt = ()=> {
                                         </h2>
                                         <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
                                             <div class="accordion-body">
+
                                                 {/* <Alert severity="success" variant="filled" >
                                                     <AlertTitle>Success</AlertTitle>
                                                     This is a success Alert with an encouraging title.
@@ -289,6 +309,19 @@ const Receipt = ()=> {
                                                 {/* <Typography variant="h5" mt={4}></Typography> */}
                                                 <div class="mt-4" style={{fontSize: 20}}>
                                                     <FormLabel id="demo-row-radio-buttons-group-label" mt={4}>Payment methods</FormLabel>
+
+                                                <Typography variant="h5">Customer Details</Typography>
+                                                <div class="row g-3">
+                                                    <div class="col">
+                                                        <input type="text" class="form-control" placeholder="Customer name" aria-label="Customer name"/>
+                                                    </div>
+                                                    <div class="col">
+                                                        <input type="text" class="form-control" placeholder="Email" aria-label="Email"/>
+                                                    </div>
+                                                </div>
+                                                {/* Checkboxes for payment methods */}
+                                                <Typography variant="h5" mt={4}>Payment methods</Typography>
+                                                <div style={{fontSize: 20}}>
                                                     <div class="form-check form-check-inline">
                                                         <input class="form-check-input" type="checkbox" onChange={handleCashToggle} id="inlineCheckbox2" value="option2"/>
                                                         <label class="form-check-label" for="inlineRadio1">Cash</label>
@@ -344,6 +377,7 @@ const Receipt = ()=> {
                                                     {/* Bank fields */}
                                                     {bank ? (
                                                         <div class="row g-2 mb-3">
+                                                        <div class="row g-2">
                                                             <div class="col-md">
                                                                 <div class="form-floating">
                                                                 <input type="email" class="form-control" id="floatingInputGrid" placeholder="name@example.com" value=""/>
@@ -358,7 +392,6 @@ const Receipt = ()=> {
                                                             </div>
                                                         </div>                                                  
                                                     ) : ('')}
-
                                                     {bank || momo || cash ? (
                                                         <button type="button" class="btn btn-primary">Submit</button>
                                                     ) : ('')}
@@ -397,7 +430,7 @@ const Receipt = ()=> {
                         </Grid>
                     </Container>
                 </Grid>
-                <Grid item size={3}>
+                <Grid item size={2.5}>
                     <Container fluid sx={{padding: 2}}>
                         {/* <Typography variant='h4'>Receipt</Typography> */}
                         <Chip sx={{fontSize: 22, padding: 3, width: '100%'}} avatar={<Avatar>M</Avatar>} color="warning" label="Pending Approvals" />
