@@ -31,13 +31,24 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
+import PriceCheckIcon from '@mui/icons-material/PriceCheck';
 import MopedIcon from '@mui/icons-material/Moped';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 const PROJECT_URI = 'https://pedlcwbxzcjuzwdupgwk.supabase.co'
 const PROJECT_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBlZGxjd2J4emNqdXp3ZHVwZ3drIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTM0MzEwNzQsImV4cCI6MjAyOTAwNzA3NH0.7GZC7LjXsoUgSHXLHDvblNPoC0y_v9UjDBYiAwLywAw'
 
 const supabase = createClient(PROJECT_URI, PROJECT_ANON);
+
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: '#1976d2',
+    },
+  },
+});
 
 const style = {
   position: 'absolute',
@@ -68,37 +79,40 @@ export default function ButtonAppBar() {
   const DrawerList = (
     <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
       <List>
-        <Link to="/" style={{ textDecoration: 'none', color: '#000'  }}>
+        <Link to="/" style={{ textDecoration: 'none', color: '#fff' }}>
           <ListItem disablePadding>
             <ListItemButton>
               <ListItemIcon>
-                <InboxIcon />
+                <DashboardIcon fontSize="large"/>
               </ListItemIcon>
-              <ListItemText primary={'Dashboard'} />
+              <ListItemText primary={'Dashboard'} fontSize="20"/>
             </ListItemButton>
           </ListItem>
         </Link>
       </List>
       <Divider />
       <List>
-        <Link to="/dispatch" style={{ textDecoration: 'none', color: '#000'  }}>
+        <Link to="/dispatch" style={{ textDecoration: 'none', color: '#fff'  }}>
           <ListItem disablePadding>
             <ListItemButton>
               <ListItemIcon>
-                <MopedIcon />
+                <MopedIcon fontSize="large"/>
               </ListItemIcon>
               <ListItemText primary={'Dispatch'} />
             </ListItemButton>
           </ListItem>
         </Link>
+
+        <Link to="/cashier" style={{ textDecoration: 'none', color: '#fff'  }}>
           <ListItem disablePadding>
             <ListItemButton>
               <ListItemIcon>
-                <MailIcon />
+                <PriceCheckIcon fontSize="large"/>
               </ListItemIcon>
-              <ListItemText primary={'Receipt'} />
+              <ListItemText primary={'Cashier'} />
             </ListItemButton>
-          </ListItem>
+          </ListItem> 
+        </Link>
       </List>
     </Box>
   );
@@ -183,6 +197,7 @@ export default function ButtonAppBar() {
 
   return (
     <>
+    <ThemeProvider theme={darkTheme}>
       <Box sx={{ flexGrow: 1 }}>
         <AppBar position="static">
           <Toolbar>
@@ -227,7 +242,11 @@ export default function ButtonAppBar() {
       <Drawer open={opendrawer} onClose={toggleDrawer(false)}>
         {DrawerList}
       </Drawer>
+      <div class="text-bg-secondary p-3">
+
       <Outlet/>
+      </div>
+    </ThemeProvider>
     </>
   );
 }
