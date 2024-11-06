@@ -12,15 +12,31 @@ const Dispatch = ()=> {
         { id: 1, invoice_no: '', amount: '' }
     ]);
 
+    const [allInvoices, setAllInvoices] = useState([]);
+
+    const handleAddAllInvoices = () => {
+        // Create a new array of invoices, copying the current fields
+        const newInvoices = fields.map(field => ({
+          invoiceNumber: field.invoice_no,
+          invoiceAmount: field.amount
+        }));
+    
+        // Add the new invoices to the allInvoices array
+        setAllInvoices([...allInvoices, ...newInvoices]);
+    
+        // Clear the current fields
+        setFields([{ id: 1, invoice_no: '', amount: '' }]);
+    };
+
     // Handle changes to input field values
-    const handleChange = (id, event) => {
-        const newFields = fields.map(field => {
-            if (field.id === id) {
-                return { ...field, value: event.target.value };
-            }
-            return field;
+    const handleChange = (id, field, value) => {
+        const newFields = fields.map(f => {
+          if (f.id === id) {
+            return { ...f, [field]: value };
+          }
+          return f;
         });
-        setFields(newFields);
+        setFields(newFields); 
     };
 
     // Add a new field to the state
@@ -64,7 +80,7 @@ const Dispatch = ()=> {
                                                 id="floatingInputGrid" 
                                                 placeholder="name@example.com" 
                                                 value={field.invoice_no}
-                                                onChange={(e) => handleChange(field.id, 'invoice_no', e)}
+                                                onChange={(e) => handleChange(field.id, 'invoice_no', e.target.value)}
                                             />
                                             <label for="floatingInputGrid">Invoice Number</label>
                                         </div>
@@ -77,7 +93,7 @@ const Dispatch = ()=> {
                                                 id="floatingInputGrid" 
                                                 placeholder="name@example.com" 
                                                 value={field.amount}
-                                                onChange={(e) => handleChange(field.id, 'amount', e)}
+                                                onChange={(e) => handleChange(field.id, 'amount', e.target.value)}
                                             />
                                             <label for="floatingInputGrid">Amount</label>
                                         </div>
@@ -90,7 +106,7 @@ const Dispatch = ()=> {
                                 Add more fields
                             </Button>
                             <Button variant="contained" onClick={handleRemoveField} color="error" startIcon={<PlaylistRemoveIcon/>}>Remove fields</Button>
-                            <Button variant="contained" color="primary" endIcon={<SendIcon/>}>
+                            <Button variant="contained" onClick={handleAddAllInvoices} color="primary" endIcon={<SendIcon/>}>
                                 Submit
                             </Button>
                         </Stack>
@@ -125,21 +141,23 @@ const Dispatch = ()=> {
                                 </Card> */}
 
                                 <div class="container text-center">
-                                    <div class="row p-3 m-2 bg-dark border border-light border-2 rounded">
-                                        <div class="col">
-                                            <Typography variant="h6" gutterBottom sx={{ color: 'text.secondary' }}>
-                                                12:00PM
-                                            </Typography>
+                                    {allInvoices?.map((invoice)=>
+                                        <div class="row p-3 m-2 bg-dark border border-light border-2 rounded">
+                                            <div class="col">
+                                                <Typography variant="h6" gutterBottom sx={{ color: 'text.secondary' }}>
+                                                    12:00PM
+                                                </Typography>
+                                            </div>
+                                            <div class="col">
+                                                <Typography variant="h5" sx={{ color: 'text.secondary' }} component="div">
+                                                    {invoice.invoiceNumber}
+                                                </Typography>
+                                            </div>
+                                            <div class="col">
+                                                <Typography variant="h6" sx={{ color: 'text.secondary',}}>$ {invoice.invoiceAmount}</Typography>
+                                            </div>
                                         </div>
-                                        <div class="col">
-                                            <Typography variant="h5" sx={{ color: 'text.secondary' }} component="div">
-                                                GL568789
-                                            </Typography>
-                                        </div>
-                                        <div class="col">
-                                            <Typography variant="h6" sx={{ color: 'text.secondary',}}>$ 9,000</Typography>
-                                        </div>
-                                    </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
