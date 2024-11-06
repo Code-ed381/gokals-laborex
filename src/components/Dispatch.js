@@ -69,6 +69,141 @@ const Dispatch = ()=> {
                                             <Typography sx={{ color: 'text.secondary',}}>$ 9,000</Typography>
                                         </div>
                                     </div>
+                                    <div class="row p-3 m-2 border border-secondary border-2 rounded">
+                                        <div class="col">
+                                            <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }}>
+                                                14TH MAY 2024, 12:00PM
+                                            </Typography>
+                                        </div>
+                                        <div class="col">
+                                            <Typography variant="h5" component="div">
+                                                GL568789
+                                            </Typography>
+                                        </div>
+                                        <div class="col">
+                                            <Typography sx={{ color: 'text.secondary',}}>$ 9,000</Typography>
+                                        </div>
+                                    </div>
+                                    <div class="row p-3 m-2 border border-secondary border-2 rounded">
+                                        <div class="col">
+                                            <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }}>
+                                                14TH MAY 2024, 12:00PM
+                                            </Typography>
+                                        </div>
+                                        <div class="col">
+                                            <Typography variant="h5" component="div">
+                                                GL568789
+                                            </Typography>
+                                        </div>
+                                        <div class="col">
+                                            <Typography sx={{ color: 'text.secondary',}}>$ 9,000</Typography>
+                                        </div>
+                                    </div>
+                                    <div class="row p-3 m-2 border border-secondary border-2 rounded">
+                                        <div class="col">
+                                            <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }}>
+                                                14TH MAY 2024, 12:00PM
+                                            </Typography>
+                                        </div>
+                                        <div class="col">
+                                            <Typography variant="h5" component="div">
+                                                GL568789
+                                            </Typography>
+                                        </div>
+                                        <div class="col">
+                                            <Typography sx={{ color: 'text.secondary',}}>$ 9,000</Typography>
+                                        </div>
+                                    </div>
+                                    <div class="row p-3 m-2 border border-secondary border-2 rounded">
+                                        <div class="col">
+                                            <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }}>
+                                                14TH MAY 2024, 12:00PM
+                                            </Typography>
+                                        </div>
+                                        <div class="col">
+                                            <Typography variant="h5" component="div">
+                                                GL568789
+                                            </Typography>
+                                        </div>
+                                        <div class="col">
+                                            <Typography sx={{ color: 'text.secondary',}}>$ 9,000</Typography>
+                                        </div>
+                                    </div>
+                                    <div class="row p-3 m-2 border border-secondary border-2 rounded">
+                                        <div class="col">
+                                            <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }}>
+                                                14TH MAY 2024, 12:00PM
+                                            </Typography>
+                                        </div>
+                                        <div class="col">
+                                            <Typography variant="h5" component="div">
+                                                GL568789
+                                            </Typography>
+                                        </div>
+                                        <div class="col">
+                                            <Typography sx={{ color: 'text.secondary',}}>$ 9,000</Typography>
+                                        </div>
+                                    </div>
+                                    <div class="row p-3 m-2 border border-secondary border-2 rounded">
+                                        <div class="col">
+                                            <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }}>
+                                                14TH MAY 2024, 12:00PM
+                                            </Typography>
+                                        </div>
+                                        <div class="col">
+                                            <Typography variant="h5" component="div">
+                                                GL568789
+                                            </Typography>
+                                        </div>
+                                        <div class="col">
+                                            <Typography sx={{ color: 'text.secondary',}}>$ 9,000</Typography>
+                                        </div>
+                                    </div>
+                                    <div class="row p-3 m-2 border border-secondary border-2 rounded">
+                                        <div class="col">
+                                            <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }}>
+                                                14TH MAY 2024, 12:00PM
+                                            </Typography>
+                                        </div>
+                                        <div class="col">
+                                            <Typography variant="h5" component="div">
+                                                GL568789
+                                            </Typography>
+                                        </div>
+                                        <div class="col">
+                                            <Typography sx={{ color: 'text.secondary',}}>$ 9,000</Typography>
+                                        </div>
+                                    </div>
+                                    <div class="row p-3 m-2 border border-secondary border-2 rounded">
+                                        <div class="col">
+                                            <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }}>
+                                                14TH MAY 2024, 12:00PM
+                                            </Typography>
+                                        </div>
+                                        <div class="col">
+                                            <Typography variant="h5" component="div">
+                                                GL568789
+                                            </Typography>
+                                        </div>
+                                        <div class="col">
+                                            <Typography sx={{ color: 'text.secondary',}}>$ 9,000</Typography>
+                                        </div>
+                                    </div>
+                                    <div class="row p-3 m-2 border border-secondary border-2 rounded">
+                                        <div class="col">
+                                            <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }}>
+                                                14TH MAY 2024, 12:00PM
+                                            </Typography>
+                                        </div>
+                                        <div class="col">
+                                            <Typography variant="h5" component="div">
+                                                GL568789
+                                            </Typography>
+                                        </div>
+                                        <div class="col">
+                                            <Typography sx={{ color: 'text.secondary',}}>$ 9,000</Typography>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
