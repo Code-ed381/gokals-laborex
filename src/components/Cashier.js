@@ -1,7 +1,7 @@
 import {Container, Stack, Modal, Input, 
     Button, Box, Typography, Radio, RadioGroup,
     FormControlLabel, FormControl, FormLabel, Chip,
-    Avatar, AlertTitle, Alert 
+    Avatar, AlertTitle, Alert, Divider
 } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -34,7 +34,7 @@ const Cashier = ()=> {
     const [momo, setMomo] = useState(false);
     const [bank, setBank] = useState(false);
     const [searchType, setSearchType] = useState('');
-    const [customer, setCustomer] = useState('old');
+    const [customer, setCustomer] = useState('');
     const [selectedDate, setSelectedDate] = useState(null);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -94,160 +94,132 @@ const Cashier = ()=> {
 
     return(
         <>
-            <Grid container spacing={2}>
+            <Grid container spacing={2} sx={{height: '90vh'}}>
                 <Grid item size={7}>
                     <Container fluid sx={{padding: 2}} class="shadow p-3 mb-5 bg-body-tertiary rounded">
-                        <Grid container spacing={2} >
-                            <Grid size={12}>
+                        <div class="card ">
+                            <div class="card-header">
+                                Add New Receipt
+                            </div>
+                            <div class="card-body">
+                                <Typography variant="h6" >Select Customer</Typography>
+                                <div class="form-check form-check-inline my-3">
+                                    <input class="form-check-input" onClick={(e)=> setCustomer(e.target.value)} type="radio" name="inlineRadioOptions" id="inlineRadio1" value="old"/>
+                                    <label class="form-check-label" for="inlineRadio1">Legacy Customer</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" onClick={(e)=> setCustomer(e.target.value)} type="radio" name="inlineRadioOptions" id="inlineRadio2" value="new"/>
+                                    <label class="form-check-label" for="inlineRadio2">First-time Customer</label>
+                                </div>
 
-                                <div class="accordion" id="accordionExample">
-                                    <div class="accordion-item">
-                                        <h2 class="accordion-header">
-                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                            Add New Receipt
-                                        </button>
-                                        </h2>
-                                        <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
-                                            <div class="accordion-body">
-                                                <FormControl>
-                                                <FormLabel id="demo-row-radio-buttons-group-label">Customer Details</FormLabel>
-                                                    <RadioGroup
-                                                        row
-                                                        aria-labelledby="demo-row-radio-buttons-group-label"
-                                                        name="row-radio-buttons-group"
-                                                        onChange={(e)=> setCustomer(e.target.value)}
-                                                    >
-                                                        <FormControlLabel value="old" control={<Radio />} label="Legacy Customer" />
-                                                        <FormControlLabel value="new" control={<Radio />} label="First-Time Customer" />
-                                                    </RadioGroup>
-                                                </FormControl>
-                                                {/* <label for="exampleDataList" class="form-label">Datalist example</label> */}
-                                                <input class="form-control" list="datalistOptions" id="exampleDataList" placeholder="Type to search..."/>
-                                                <datalist id="datalistOptions">
-                                                    <option value="San Francisco"/>
-                                                    <option value="New York"/>
-                                                    <option value="Seattle"/>
-                                                    <option value="Los Angeles"/>
-                                                    <option value="Chicago"/>
-                                                </datalist>
-                                                <div class="row g-3">
-                                                    <div class="col">
-                                                        <input type="text" class="form-control" placeholder="Customer name" aria-label="Customer name"/>
-                                                    </div>
-                                                    <div class="col">
-                                                        <input type="text" class="form-control" placeholder="Email" aria-label="Email"/>
-                                                    </div>
-                                                </div>
-                                                {/* Checkboxes for payment methods */}
-                                                {/* <Typography variant="h5" mt={4}></Typography> */}
-                                                <div class="mt-4" style={{fontSize: 20}}>
-                                                    <FormLabel id="demo-row-radio-buttons-group-label" mt={4}>Payment methods</FormLabel>
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="checkbox" onChange={handleCashToggle} id="inlineCheckbox2" value="option2"/>
-                                                        <label class="form-check-label" for="inlineRadio1">Cash</label>
-                                                    </div>
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="checkbox" onChange={handleMomoToggle} id="inlineCheckbox3" value="option3"/>
-                                                        <label class="form-check-label" for="inlineRadio2">Momo</label>
-                                                    </div>
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="checkbox" onChange={handleBankToggle} id="inlineCheckbox1" value="option1"/>
-                                                        <label class="form-check-label" for="inlineRadio1">Bank</label>
-                                                    </div>
-                                                </div>
+                                {customer === 'old' ? (
+                                    <>
+                                        <input class="form-control" list="datalistOptions" id="exampleDataList" placeholder="Type to search..."/>
+                                        <datalist id="datalistOptions">
+                                            <option value="San Francisco"/>
+                                            <option value="New York"/>
+                                            <option value="Seattle"/>
+                                            <option value="Los Angeles"/>
+                                            <option value="Chicago"/>
+                                        </datalist>
+                                    </>
+                                ) : customer === 'new' ? (
+                                    <div class="row g-3">
+                                        <div class="col">
+                                            <input type="text" class="form-control" placeholder="Customer name" aria-label="Customer name"/>
+                                        </div>
+                                        <div class="col">
+                                            <input type="text" class="form-control" placeholder="Email" aria-label="Email"/>
+                                        </div>
+                                    </div>
+                                ) : ('')}
 
-                                                <div>
-                                                    {/* Cash fields */}
-                                                    {cash ? (
-                                                        <div class="row g-2 mb-3">
-                                                            <div class="col-md">
-                                                                <div class="form-floating">
-                                                                <input type="email" class="form-control" id="floatingInputGrid" placeholder="name@example.com" value=""/>
-                                                                <label for="floatingInputGrid">Cash Amount</label>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md">
-                                                                <div class="form-floating">
-                                                                    <input type="password" class="form-control" id="floatingPassword" placeholder="Password"/>
-                                                                    <label for="floatingPassword">Cash Receipt ID</label>
-                                                                </div>
-                                                            </div>
-                                                        </div>     
-                                                    ) : ('')}
+                                {/* <Divider textAlign="left" sx={{color: '#000'}}>LEFT</Divider> */}
+                                <div class="mt-4" style={{fontSize: 20}}>
+                                <Typography variant="h6" mt={4} sx={{color: '#000'}}>Payment methods</Typography>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" onChange={handleCashToggle} id="inlineCheckbox2" value="option2"/>
+                                        <label class="form-check-label" for="inlineRadio1">Cash</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" onChange={handleMomoToggle} id="inlineCheckbox3" value="option3"/>
+                                        <label class="form-check-label" for="inlineRadio2">Momo</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" onChange={handleBankToggle} id="inlineCheckbox1" value="option1"/>
+                                        <label class="form-check-label" for="inlineRadio1">Bank Transfer</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" onChange={handleBankToggle} id="inlineCheckbox1" value="option1"/>
+                                        <label class="form-check-label" for="inlineRadio1">Cheques</label>
+                                    </div>
+                                </div>
 
-
-                                                    {/* Momo fields */}
-                                                    {momo ? (
-                                                        <div class="row g-2 mb-3">
-                                                            <div class="col-md">
-                                                                <div class="form-floating">
-                                                                <input type="email" class="form-control" id="floatingInputGrid" placeholder="name@example.com" />
-                                                                <label for="floatingInputGrid">Momo Amount</label>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md">
-                                                                <div class="form-floating">
-                                                                    <input type="password" class="form-control" id="floatingPassword" placeholder="Password"/>
-                                                                    <label for="floatingPassword">Momo Transaction ID</label>
-                                                                </div>
-                                                            </div>
-                                                        </div>   
-                                                    ) : ('')}
-
-                                                    {/* Bank fields */}
-                                                    {bank ? (
-                                                        <div class="row g-2 mb-3">
-                                                            <div class="col-md">
-                                                                <div class="form-floating">
-                                                                <input type="email" class="form-control" id="floatingInputGrid" placeholder="name@example.com" value=""/>
-                                                                <label for="floatingInputGrid">Bank Amount</label>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md">
-                                                                <div class="form-floating">
-                                                                    <input type="password" class="form-control" id="floatingPassword" placeholder="Password"/>
-                                                                    <label for="floatingPassword">Bank Transaction ID</label>
-                                                                </div>
-                                                            </div>
-                                                        </div>                                                  
-                                                    ) : ('')}
-
-                                                    {bank || momo || cash ? (
-                                                        <button type="button" class="btn btn-primary">Submit</button>
-                                                    ) : ('')}
+                                <div>
+                                    {/* Cash fields */}
+                                    {cash ? (
+                                        <div class="row g-2 mb-3">
+                                            <div class="col-md">
+                                                <div class="form-floating">
+                                                <input type="email" class="form-control" id="floatingInputGrid" placeholder="name@example.com" value=""/>
+                                                <label for="floatingInputGrid">Cash Amount</label>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    {/* <div class="accordion-item">
-                                        <h2 class="accordion-header">
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                            Accordion Item #2
-                                        </button>
-                                        </h2>
-                                        <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-                                        <div class="accordion-body">
-                                            <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-                                        </div>
-                                        </div>
-                                    </div>
-                                    <div class="accordion-item">
-                                        <h2 class="accordion-header">
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                            Accordion Item #3
-                                        </button>
-                                        </h2>
-                                        <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-                                        <div class="accordion-body">
-                                            <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-                                        </div>
-                                        </div>
-                                    </div> */}
+                                            <div class="col-md">
+                                                <div class="form-floating">
+                                                    <input type="password" class="form-control" id="floatingPassword" placeholder="Password"/>
+                                                    <label for="floatingPassword">Cash Receipt ID</label>
+                                                </div>
+                                            </div>
+                                        </div>     
+                                    ) : ('')}
+
+
+                                    {/* Momo fields */}
+                                    {momo ? (
+                                        <div class="row g-2 mb-3">
+                                            <div class="col-md">
+                                                <div class="form-floating">
+                                                <input type="email" class="form-control" id="floatingInputGrid" placeholder="name@example.com" />
+                                                <label for="floatingInputGrid">Momo Amount</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md">
+                                                <div class="form-floating">
+                                                    <input type="password" class="form-control" id="floatingPassword" placeholder="Password"/>
+                                                    <label for="floatingPassword">Momo Transaction ID</label>
+                                                </div>
+                                            </div>
+                                        </div>   
+                                    ) : ('')}
+
+                                    {/* Bank fields */}
+                                    {bank ? (
+                                        <div class="row g-2 mb-3">
+                                            <div class="col-md">
+                                                <div class="form-floating">
+                                                <input type="email" class="form-control" id="floatingInputGrid" placeholder="name@example.com" value=""/>
+                                                <label for="floatingInputGrid">Bank Amount</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md">
+                                                <div class="form-floating">
+                                                    <input type="password" class="form-control" id="floatingPassword" placeholder="Password"/>
+                                                    <label for="floatingPassword">Bank Transaction ID</label>
+                                                </div>
+                                            </div>
+                                        </div>                                                  
+                                    ) : ('')}
+
+                                    {bank || momo || cash ? (
+                                        <button type="button" class="btn btn-primary">Submit</button>
+                                    ) : ('')}
                                 </div>
-                            </Grid>
-                            {/* <Grid size={8}>
-                            </Grid> */}
-                        </Grid>
+                            </div>
+                            <div class="card-footer text-body-secondary">
+                                2 days ago
+                            </div>
+                        </div>
                     </Container>
                 </Grid>
 
