@@ -4,9 +4,6 @@ import {Container, Stack, Modal, Input,
     Avatar, AlertTitle, Alert, Divider
 } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { createClient } from '@supabase/supabase-js';
 import { useEffect, useState } from "react";
 
@@ -33,8 +30,12 @@ const Cashier = ()=> {
     const [cash, setCash] = useState(false);
     const [momo, setMomo] = useState(false);
     const [bank, setBank] = useState(false);
+    const [cheque, setCheque] = useState(false);
+    const [pdc, setPdc] = useState(false);
+    const [initialPayment, setInitialPayment] = useState(false);
     const [searchType, setSearchType] = useState('');
     const [customer, setCustomer] = useState('');
+    const [paymentStatus, setPaymentStatus] = useState('');
     const [selectedDate, setSelectedDate] = useState(null);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -49,6 +50,24 @@ const Cashier = ()=> {
 
     const handleBankToggle = ()=> {
         setBank(prevState => !prevState);
+    }
+
+    const handleChequeToggle = ()=> {
+        setCheque(prevState => !prevState);
+    }
+
+    const handlePDCToggle = ()=> {
+        setPdc(prevState => !prevState);
+    }
+
+    const handlePaymentStatus = (e)=> {
+        setPaymentStatus(e.target.value)
+        setCash(false)
+        setMomo(false)
+        setCheque(false)
+        setBank(false)
+        setPdc(false)
+        setInitialPayment(false)
     }
 
     // Helper function to extract the day, month, and year from a date
@@ -81,9 +100,9 @@ const Cashier = ()=> {
 
             // Compare day, month, and year
             return (
-            itemDayMonthYear.day === selectedDayMonthYear.day &&
-            itemDayMonthYear.month === selectedDayMonthYear.month &&
-            itemDayMonthYear.year === selectedDayMonthYear.year
+                itemDayMonthYear.day === selectedDayMonthYear.day &&
+                itemDayMonthYear.month === selectedDayMonthYear.month &&
+                itemDayMonthYear.year === selectedDayMonthYear.year
             );
         });
 
@@ -102,118 +121,242 @@ const Cashier = ()=> {
                                 Add New Receipt
                             </div>
                             <div class="card-body">
-                                <Typography variant="h6" >Select Customer</Typography>
-                                <div class="form-check form-check-inline my-3">
-                                    <input class="form-check-input" onClick={(e)=> setCustomer(e.target.value)} type="radio" name="inlineRadioOptions" id="inlineRadio1" value="old"/>
-                                    <label class="form-check-label" for="inlineRadio1">Legacy Customer</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" onClick={(e)=> setCustomer(e.target.value)} type="radio" name="inlineRadioOptions" id="inlineRadio2" value="new"/>
-                                    <label class="form-check-label" for="inlineRadio2">First-time Customer</label>
-                                </div>
+                                <div class="row">
+                                    <div class='col-8'>
+                                        <Typography variant="h6" ><strong>SELECT CUSTOMER</strong></Typography>
+                                        <div >
+                                            <div class="form-check form-check-inline my-1">
+                                                <input class="form-check-input" onClick={(e)=> setCustomer(e.target.value)} type="radio" name="inlineRadioOptions" id="inlineRadio1" value="old"/>
+                                                <label class="form-check-label" for="inlineRadio1">Legacy Customer</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" onClick={(e)=> setCustomer(e.target.value)} type="radio" name="inlineRadioOptions" id="inlineRadio2" value="new"/>
+                                                <label class="form-check-label" for="inlineRadio2">First-time Customer</label>
+                                            </div>
 
-                                {customer === 'old' ? (
-                                    <>
-                                        <input class="form-control" list="datalistOptions" id="exampleDataList" placeholder="Type to search..."/>
-                                        <datalist id="datalistOptions">
-                                            <option value="San Francisco"/>
-                                            <option value="New York"/>
-                                            <option value="Seattle"/>
-                                            <option value="Los Angeles"/>
-                                            <option value="Chicago"/>
-                                        </datalist>
-                                    </>
-                                ) : customer === 'new' ? (
-                                    <div class="row g-3">
-                                        <div class="col">
-                                            <input type="text" class="form-control" placeholder="Customer name" aria-label="Customer name"/>
+                                            {customer === 'old' ? (
+                                                <>
+                                                    <input class="form-control" list="datalistOptions" id="exampleDataList" placeholder="Type to search..."/>
+                                                    <datalist id="datalistOptions">
+                                                        <option value="San Francisco"/>
+                                                        <option value="New York"/>
+                                                        <option value="Seattle"/>
+                                                        <option value="Los Angeles"/>
+                                                        <option value="Chicago"/>
+                                                    </datalist>
+                                                </>
+                                            ) : customer === 'new' ? (
+                                                <div class="row g-3">
+                                                    <div class="col">
+                                                        <input type="text" class="form-control" placeholder="Customer name" aria-label="Customer name"/>
+                                                    </div>
+                                                    <div class="col">
+                                                        <input type="text" class="form-control" placeholder="Email" aria-label="Email"/>
+                                                    </div>
+                                                </div>
+                                            ) : ('')}
                                         </div>
-                                        <div class="col">
-                                            <input type="text" class="form-control" placeholder="Email" aria-label="Email"/>
+
+                                        <Typography variant="h6" mt={4} sx={{color: '#000'}}><strong>PAYMENT DETAILS</strong></Typography>
+                                        <div>
+                                            <div class="form-check form-check-inline my-1">
+                                                <input class="form-check-input" onClick={handlePaymentStatus} type="radio" name="paymentStatus" id="partialPayment" value="partialPayment"/>
+                                                <label class="form-check-label" for="inlineRadio1">Installment Payment</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" onClick={handlePaymentStatus} type="radio" name="paymentStatus" id="fullPayment" value="fullPayment"/>
+                                                <label class="form-check-label" for="inlineRadio2">Full Payment</label>
+                                            </div>
+                                        </div>
+
+                                        {paymentStatus === 'partialPayment' ? (
+                                            <>
+                                                <div class="hstack gap-3">
+                                                    <div class="p-2">
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="checkbox" onChange={()=> setInitialPayment(prevState => !prevState)} id="initialPayment" value={initialPayment}/>
+                                                            <label class="form-check-label" for="inlineRadio1">Initial Deposit</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="p-2">
+                                                        <select class="form-select form-select-sm" aria-label="Small select example">
+                                                            <option selected>Click to select payment terms</option>
+                                                            <option value="7">7 Days</option>
+                                                            <option value="30">30 Days</option>
+                                                            <option value="60">60 Days</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                {initialPayment ? (
+                                                    <>
+                                                        <div class="my-2" >
+                                                            <Typography variant="h6"><small><em>Payment Methods</em></small></Typography>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="checkbox" onChange={handleCashToggle} id="inlineCheckbox2" value="option2"/>
+                                                                <label class="form-check-label" for="inlineRadio1">Cash</label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="checkbox" onChange={handleMomoToggle} id="inlineCheckbox3" value="option3"/>
+                                                                <label class="form-check-label" for="inlineRadio2">Momo</label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="checkbox" onChange={handleBankToggle} id="inlineCheckbox1" value="option1"/>
+                                                                <label class="form-check-label" for="inlineRadio1">Bank Transfer</label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="checkbox" onChange={handleChequeToggle} id="inlineCheckbox1" value="option1"/>
+                                                                <label class="form-check-label" for="inlineRadio1">Cheque</label>
+                                                            </div>
+                                                        </div>
+                                                    </>
+                                                ) : ('')}
+                                            </>
+                                        ) : paymentStatus === "fullPayment" ? (
+                                            <>
+                                                <div class="my-2">
+                                                    <Typography variant="h6" sx={{color: '#000'}}>Payment methods</Typography>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="checkbox" onChange={handleCashToggle} id="inlineCheckbox2" value="cash"/>
+                                                        <label class="form-check-label" for="inlineRadio1">Cash</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="checkbox" onChange={handleMomoToggle} id="inlineCheckbox3" value="momo"/>
+                                                        <label class="form-check-label" for="inlineRadio2">Momo</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="checkbox" onChange={handleBankToggle} id="inlineCheckbox1" value="bank"/>
+                                                        <label class="form-check-label" for="inlineRadio1">Bank Transfer</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="checkbox" onChange={handleChequeToggle} id="inlineCheckbox1" value="cheque"/>
+                                                        <label class="form-check-label" for="inlineRadio1">Cheque</label>
+                                                    </div>
+                                                </div>
+                                            </>
+                                        ) : ('')}
+
+                                        <div>
+                                            {/* Cash fields */}
+                                            {cash ? (
+                                                <div class="row g-2 mb-3">
+                                                    <div class="col-md">
+                                                        <div class="form-floating">
+                                                        <input type="email" class="form-control" id="floatingInputGrid" placeholder="name@example.com" value=""/>
+                                                        <label for="floatingInputGrid">Cash Amount</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md">
+                                                        <div class="form-floating">
+                                                            <input type="password" class="form-control" id="floatingPassword" placeholder="Password"/>
+                                                            <label for="floatingPassword">Cash Receipt ID</label>
+                                                        </div>
+                                                    </div>
+                                                </div>     
+                                            ) : ('')}
+
+                                            {/* Momo fields */}
+                                            {momo ? (
+                                                <div class="row g-2 mb-3">
+                                                    <div class="col-md">
+                                                        <div class="form-floating">
+                                                        <input type="email" class="form-control" id="floatingInputGrid" placeholder="name@example.com" />
+                                                        <label for="floatingInputGrid">Momo Amount</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md">
+                                                        <div class="form-floating">
+                                                            <input type="password" class="form-control" id="floatingPassword" placeholder="Password"/>
+                                                            <label for="floatingPassword">Momo Transaction ID</label>
+                                                        </div>
+                                                    </div>
+                                                </div>   
+                                            ) : ('')}
+
+                                            {/* Bank fields */}
+                                            {bank ? (
+                                                <div class="row g-2 mb-3">
+                                                    <div class="col-md">
+                                                        <div class="form-floating">
+                                                        <input type="email" class="form-control" id="floatingInputGrid" placeholder="name@example.com" value=""/>
+                                                        <label for="floatingInputGrid">Bank Amount</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md">
+                                                        <div class="form-floating">
+                                                            <input type="password" class="form-control" id="floatingPassword" placeholder="Password"/>
+                                                            <label for="floatingPassword">Bank Transaction ID</label>
+                                                        </div>
+                                                    </div>
+                                                </div>                                                  
+                                            ) : ('')}
+
+                                            {/* Cheque fields */}
+                                            {cheque ? (
+                                                <>
+                                                    <div class="row g-2 mb-1">
+                                                        <div class="form-check form-switch">
+                                                            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" onClick={handlePDCToggle}/>
+                                                            <label class="form-check-label" for="flexSwitchCheckDefault"><strong><small><em>POST-DATED CHEQUE</em></small></strong></label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row g-2 mb-3">
+                                                        <div class="col-md">
+                                                            <div class="form-floating">
+                                                            <input type="email" class="form-control" id="floatingInputGrid" placeholder="name@example.com" value=""/>
+                                                            <label for="floatingInputGrid">Cheque Amount</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md">
+                                                            <div class="form-floating">
+                                                                <input type="password" class="form-control" id="floatingPassword" placeholder="Password"/>
+                                                                <label for="floatingPassword">Cheque ID</label>
+                                                            </div>
+                                                        </div>
+                                                        {pdc ? (
+                                                            <div class="col-md">
+                                                                <div class="form-floating">
+                                                                    <input type="date" class="form-control" id="floatingPassword" placeholder="Password"/>
+                                                                    <label for="floatingPassword">Select Due Date</label>
+                                                                </div>
+                                                            </div>
+                                                        ) : ('')}
+                                                    </div>                                                  
+                                                </>
+                                            ) : ('')}
+
+                                            {bank || momo || cash || cheque ? (
+                                                <button type="button" class="btn btn-primary">Submit</button>
+                                            ) : ('')}
                                         </div>
                                     </div>
-                                ) : ('')}
-
-                                {/* <Divider textAlign="left" sx={{color: '#000'}}>LEFT</Divider> */}
-                                <div class="mt-4" style={{fontSize: 20}}>
-                                <Typography variant="h6" mt={4} sx={{color: '#000'}}>Payment methods</Typography>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" onChange={handleCashToggle} id="inlineCheckbox2" value="option2"/>
-                                        <label class="form-check-label" for="inlineRadio1">Cash</label>
+                                    <div class='col-4'>
+                                        <ul class="list-group">
+                                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                                <div class="ms-2 me-auto">
+                                                    <input class="form-check-input me-1" type="checkbox" value="" id="firstCheckboxStretched"/>
+                                                    <label class="form-check-label stretched-link" for="firstCheckboxStretched"><div class="fw-bold">Subheading</div></label>
+                                                    
+                                                </div>
+                                                <span class="badge text-bg-primary rounded-pill">14</span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                                <div class="ms-2 me-auto">
+                                                    <input class="form-check-input me-1" type="checkbox" value="" id="firstCheckboxStretched"/>
+                                                    <label class="form-check-label stretched-link" for="firstCheckboxStretched"><div class="fw-bold">Subheading</div></label>
+                                                    
+                                                </div>
+                                                <span class="badge text-bg-primary rounded-pill">14</span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                                <div class="ms-2 me-auto">
+                                                    <input class="form-check-input me-1" type="checkbox" value="" id="firstCheckboxStretched"/>
+                                                    <label class="form-check-label stretched-link" for="firstCheckboxStretched"><div class="fw-bold">Subheading</div></label>
+                                                    
+                                                </div>
+                                                <span class="badge text-bg-primary rounded-pill">14</span>
+                                            </li>
+                                        </ul>
                                     </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" onChange={handleMomoToggle} id="inlineCheckbox3" value="option3"/>
-                                        <label class="form-check-label" for="inlineRadio2">Momo</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" onChange={handleBankToggle} id="inlineCheckbox1" value="option1"/>
-                                        <label class="form-check-label" for="inlineRadio1">Bank Transfer</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" onChange={handleBankToggle} id="inlineCheckbox1" value="option1"/>
-                                        <label class="form-check-label" for="inlineRadio1">Cheques</label>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    {/* Cash fields */}
-                                    {cash ? (
-                                        <div class="row g-2 mb-3">
-                                            <div class="col-md">
-                                                <div class="form-floating">
-                                                <input type="email" class="form-control" id="floatingInputGrid" placeholder="name@example.com" value=""/>
-                                                <label for="floatingInputGrid">Cash Amount</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-md">
-                                                <div class="form-floating">
-                                                    <input type="password" class="form-control" id="floatingPassword" placeholder="Password"/>
-                                                    <label for="floatingPassword">Cash Receipt ID</label>
-                                                </div>
-                                            </div>
-                                        </div>     
-                                    ) : ('')}
-
-
-                                    {/* Momo fields */}
-                                    {momo ? (
-                                        <div class="row g-2 mb-3">
-                                            <div class="col-md">
-                                                <div class="form-floating">
-                                                <input type="email" class="form-control" id="floatingInputGrid" placeholder="name@example.com" />
-                                                <label for="floatingInputGrid">Momo Amount</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-md">
-                                                <div class="form-floating">
-                                                    <input type="password" class="form-control" id="floatingPassword" placeholder="Password"/>
-                                                    <label for="floatingPassword">Momo Transaction ID</label>
-                                                </div>
-                                            </div>
-                                        </div>   
-                                    ) : ('')}
-
-                                    {/* Bank fields */}
-                                    {bank ? (
-                                        <div class="row g-2 mb-3">
-                                            <div class="col-md">
-                                                <div class="form-floating">
-                                                <input type="email" class="form-control" id="floatingInputGrid" placeholder="name@example.com" value=""/>
-                                                <label for="floatingInputGrid">Bank Amount</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-md">
-                                                <div class="form-floating">
-                                                    <input type="password" class="form-control" id="floatingPassword" placeholder="Password"/>
-                                                    <label for="floatingPassword">Bank Transaction ID</label>
-                                                </div>
-                                            </div>
-                                        </div>                                                  
-                                    ) : ('')}
-
-                                    {bank || momo || cash ? (
-                                        <button type="button" class="btn btn-primary">Submit</button>
-                                    ) : ('')}
                                 </div>
                             </div>
                             <div class="card-footer text-body-secondary">
@@ -250,13 +393,13 @@ const Cashier = ()=> {
                             </div>
                         ) : searchType === 'date' ? (
                             <div class='mt-3'>
-                                <LocalizationProvider dateAdapter={AdapterDayjs} >
+                                {/* <LocalizationProvider dateAdapter={AdapterDayjs} >
                                     <DatePicker
                                         value={selectedDate}
                                         onChange={handleDateChange}
                                         fullWidth
                                     />
-                                </LocalizationProvider>
+                                </LocalizationProvider> */}
                             </div>
                         ) : ('')}
                         
